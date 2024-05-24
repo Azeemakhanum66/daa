@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX100
+
+// Adjacency list representation of graph
+int graph[MAX][MAX];
+int numVertices;
+
+// Depth-First Search (DFS) algorithm
+void DFS(int vertex, bool visited[]) {
+    visited[vertex] = true;
+    printf("%d ", vertex);
+
+    for (int i = 0; i < numVertices; ++i) {
+        if (graph[vertex][i] && !visited[i]) {
+            DFS(i, visited);
+        }
+    }
+}
+
+// Breadth-First Search (BFS) algorithm
+void BFS(int start, bool visited[]) {
+    int queue[MAX];
+    int front = 0, rear = 0;
+
+    visited[start] = true;
+    queue[rear++] = start;
+
+    while (front < rear) {
+        int current = queue[front++];
+        printf("%d ", current);
+
+        for (int i = 0; i < numVertices; ++i) {
+            if (graph[current][i] && !visited[i]) {
+                visited[i] = true;
+                queue[rear++] = i;
+            }
+        }
+    }
+}
+
+int main() {
+    // Number of vertices
+    printf("Enter the number of vertices: ");
+    scanf("%d", &numVertices);
+
+    // Adjacency matrix input
+    printf("Enter the adjacency matrix:\n");
+    for (int i = 0; i < numVertices; ++i) {
+        for (int j = 0; j < numVertices; ++j) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+
+    // Visited array for DFS and BFS
+    bool visited[MAX] = {false};
+
+    // Starting vertex for DFS and BFS
+    int startVertex;
+    printf("Enter the starting vertex for DFS and BFS: ");
+    scanf("%d", &startVertex);
+
+    printf("Depth-First Search (DFS): ");
+    DFS(startVertex, visited);
+    printf("\n");
+
+    // Resetting visited array for BFS
+    for (int i = 0; i < numVertices; ++i) {
+        visited[i] = false;
+    }
+
+    printf("Breadth-First Search (BFS): ");
+    BFS(startVertex, visited);
+    printf("\n");
+
+    return 0;
+}
