@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+int partition(int a[1000], int low, int high){
+    int key = a[low], i=low+1; int j=high, temp;
+    for(;;){
+        while(key>=a[i] && i<high)i++;
+        while(key<=a[j])j--;
+        if(i<j){
+            temp=a[i];
+            a[i]=a[j];
+            a[j]=temp;
+        }
+        else{   
+            temp=a[j];
+            a[j]=a[low];
+            a[low]=temp;
+            return j;
+        }
+    }
+}
+
+void quicksort(int a[1000], int low, int high){
+    int  j;
+    if(low<high){
+        j= partition(a, low, high);
+        quicksort(a, low, j-1);
+        quicksort(a, j+1, high);
+    }
+}
+
+int main(){
+    int n, a[1000], i, j;
+    clock_t t1, t2;
+    srand(time(NULL)); // seed the random number generator
+    printf("Enter the number of elements\n");
+    scanf("%d", &n);
+    for(i=0; i<n; i++){ // fix the loop bound to <n
+        a[i]=rand()%1000;
+    }
+    t1=clock();
+    quicksort(a, 0, n-1);
+    t2= clock();
+    printf("sorted elements are\n");
+    for(i=0; i<n; i++){
+        printf("%d\n", a[i]);
+    }
+    printf("time taken is %f seconds\n",(double) (t2-t1)/CLOCKS_PER_SEC);
+    return 0;
+}
